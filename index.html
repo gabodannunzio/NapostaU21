@@ -1041,7 +1041,7 @@ function buildStats(){
   var lRec=best(vals,function(p){return p.rec/p.pj;});
   var lVal=best(vals,function(p){return p.val/p.pj;});
   var l2p=best(filt(vals,function(p){return p.tc2i>=5;}),function(p){return p.tc2a/p.tc2i;});
-  var l3p=best(filt(vals,function(p){return p.tc3i>=5;}),function(p){return p.tc3a/p.tc3i;});
+  var l3p=best(filt(vals,function(p){return p.tc3i>=11;}),function(p){return p.tc3a/p.tc3i;});
   var lTl =best(filt(vals,function(p){return p.tli>=5; }),function(p){return p.tla/p.tli;});
   function card(cat,name,num,det){
     return '<div class="leader"><div class="leader-cat">'+cat+'</div><div class="leader-name">'+name+'</div><div class="leader-num">'+num+'</div><div class="leader-detail">'+det+'</div></div>';
