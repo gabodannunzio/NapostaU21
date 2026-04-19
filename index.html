@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Naposta U21 — Estadísticas Básquet</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f0f2f5;font-family:'Segoe UI',Helvetica,Arial,sans-serif;color:#1a1a2e;min-height:100vh}
+
+/* ── TOP NAV ── */
+.topbar{background:#1a1a2e;padding:10px 24px;display:flex;align-items:center;gap:14px}
+.topbar-logo{width:38px;height:38px;background:#f97316;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.topbar-title{color:#fff;font-size:1rem;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.topbar-sub{color:#94a3b8;font-size:.75rem;margin-top:1px}
+.topbar-coach{margin-left:auto;background:rgba(249,115,22,.15);border:1px solid rgba(249,115,22,.35);border-radius:20px;padding:4px 12px;color:#fdba74;font-size:.72rem;white-space:nowrap}
+
+/* ── SEASON SUMMARY ── */
+.summary{display:flex;gap:12px;padding:20px 24px;flex-wrap:wrap}
+.scard{background:#fff;border-radius:10px;padding:16px 20px;flex:1;min-width:110px;border-top:3px solid #f97316;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.scard-label{font-size:.65rem;text-transform:uppercase;letter-spacing:1px;color:#64748b;margin-bottom:4px}
+.scard-val{font-size:1.8rem;font-weight:800;color:#1a1a2e;line-height:1}
+.scard-sub{font-size:.7rem;color:#94a3b8;margin-top:3px}
+
+/* ── TABS ── */
+.content{max-width:1280px;margin:0 auto;padding:0 16px 48px}
+.tabs{display:flex;gap:2px;border-bottom:2px solid #e2e8f0;margin-bottom:20px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{background:none;border:none;padding:10px 22px;font-size:.82rem;font-weight:700;color:#64748b;cursor:pointer;text-transform:uppercase;letter-spacing:.5px;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:color .15s,border-color .15s}
+.tab:hover{color:#1a1a2e}
+.tab.active{color:#f97316;border-bottom-color:#f97316}
+.panel{display:none}.panel.active{display:block}
+
+/* ── GAME HEADER ── */
+.game-card{background:#fff;border-radius:12px;padding:18px 22px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.07);display:flex;align-items:center;flex-wrap:wrap;gap:16px}
+.game-matchup{flex:1;min-width:200px}
+.game-title{font-size:.7rem;text-transform:uppercase;letter-spacing:1px;color:#94a3b8;margin-bottom:5px}
+.game-teams{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.team-name{font-size:1rem;font-weight:800;color:#1a1a2e}
+.team-score{font-size:2.2rem;font-weight:900;color:#1a1a2e;min-width:48px;text-align:center}
+.vs{color:#94a3b8;font-size:.9rem;font-weight:600}
+.score-sep{color:#e2e8f0;font-size:1.5rem;margin:0 4px}
+.badge{display:inline-block;border-radius:6px;padding:3px 10px;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+.badge-win{background:#dcfce7;color:#16a34a}
+.badge-loss{background:#fee2e2;color:#dc2626}
+.badge-local{background:#eff6ff;color:#2563eb}
+.badge-visit{background:#fefce8;color:#ca8a04}
+.game-meta{display:flex;flex-direction:column;gap:5px}
+.game-shooting{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;min-width:240px}
+.shoot-box{background:#f8fafc;border-radius:8px;padding:8px 6px}
+.shoot-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.5px;color:#94a3b8}
+.shoot-frac{font-size:.85rem;font-weight:700;color:#1a1a2e;margin:2px 0}
+.shoot-pct{font-size:.7rem;font-weight:700}
+.pct-hi{color:#16a34a}.pct-md{color:#ca8a04}.pct-lo{color:#dc2626}
+
+/* ── STAT TABLE ── */
+.tbl-wrap{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.07);overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:.78rem;min-width:960px}
+thead tr:first-child th{background:#1a1a2e;color:#94a3b8;font-size:.62rem;text-transform:uppercase;letter-spacing:.5px;padding:7px 8px;text-align:center;border-right:1px solid rgba(255,255,255,.06)}
+thead tr:first-child th.th-player{text-align:left;border-right:1px solid rgba(255,255,255,.06)}
+thead tr:last-child th{background:#1e293b;color:#94a3b8;font-size:.68rem;text-transform:uppercase;letter-spacing:.4px;padding:8px 6px;text-align:center;border-right:1px solid rgba(255,255,255,.05);border-bottom:3px solid #f97316;white-space:nowrap}
+thead tr:last-child th.th-player{text-align:left;padding-left:14px}
+tbody tr{border-bottom:1px solid #f1f5f9;transition:background .1s}
+tbody tr:hover{background:#fff7ed}
+tbody tr.row-totals{background:#fef3c7;border-top:2px solid #f97316}
+tbody tr.row-totals td{font-weight:700;color:#92400e}
+tbody tr.row-zero td{color:#cbd5e1}
+td{padding:9px 6px;text-align:center;vertical-align:middle}
+td.td-player{text-align:left;padding-left:14px;white-space:nowrap;font-weight:600;min-width:210px}
+td.td-player small{display:block;font-size:.68rem;color:#94a3b8;font-weight:400;margin-top:1px}
+.jersey{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:#f1f5f9;border-radius:4px;font-size:.65rem;font-weight:700;color:#64748b;margin-right:7px;flex-shrink:0}
+.starter-dot{display:inline-block;width:5px;height:5px;background:#f97316;border-radius:50%;margin-left:5px;vertical-align:middle}
+.cap-tag{display:inline-block;background:#fbbf24;color:#713f12;font-size:.55rem;font-weight:800;padding:1px 4px;border-radius:3px;margin-left:4px;vertical-align:middle;text-transform:uppercase}
+td.val-pos{color:#16a34a;font-weight:700}
+td.val-neg{color:#dc2626;font-weight:600}
+td.val-zero{color:#94a3b8}
+td.pm-pos{color:#16a34a;font-weight:600}
+td.pm-neg{color:#dc2626;font-weight:600}
+td.dash{color:#e2e8f0}
+.pct-hi-td{color:#16a34a;font-weight:700}
+.pct-md-td{color:#ca8a04;font-weight:600}
+.pct-lo-td{color:#dc2626}
+
+/* ── AVERAGES PAGE ── */
+.leaders{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:10px;margin-bottom:26px}
+.leader{background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.07);border-left:4px solid #f97316;position:relative}
+.leader-cat{font-size:.62rem;text-transform:uppercase;letter-spacing:1px;color:#94a3b8;margin-bottom:4px}
+.leader-name{font-size:.82rem;font-weight:700;color:#1a1a2e}
+.leader-num{font-size:1.7rem;font-weight:900;color:#f97316;line-height:1.1}
+.leader-detail{font-size:.68rem;color:#94a3b8;margin-top:2px}
+.section-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#f97316;border-left:3px solid #f97316;padding-left:10px;margin:24px 0 12px}
+
+footer{text-align:center;color:#94a3b8;font-size:.72rem;padding:20px;border-top:1px solid #e2e8f0;margin-top:8px}
+
+@media(max-width:768px){
+  .topbar{padding:8px 14px}
+  .topbar-coach{display:none}
+  .summary{padding:10px 10px;gap:8px}
+  .scard{padding:12px 14px;min-width:calc(50% - 8px)}
+  .scard-val{font-size:1.4rem}
+  .content{padding:0 8px 32px}
+  .tab{padding:8px 12px;font-size:.72rem;letter-spacing:0}
+  .game-card{padding:14px 14px;gap:10px}
+  .team-score{font-size:1.8rem}
+  .team-name{font-size:.88rem}
+  .game-shooting{min-width:0;width:100%}
+  .leaders{grid-template-columns:1fr 1fr;gap:8px}
+  .leader{padding:10px 12px}
+  .leader-num{font-size:1.4rem}
+  .section-title{margin:16px 0 8px}
+  table{font-size:.72rem;min-width:820px}
+  td{padding:7px 4px}
+  td.td-player{min-width:140px;padding-left:8px}
+  thead tr:first-child th{padding:5px 4px;font-size:.58rem}
+  thead tr:last-child th{padding:6px 4px;font-size:.62rem}
+}
+@media(max-width:480px){
+  .scard-val{font-size:1.2rem}
+  .scard-label{font-size:.6rem}
+  .team-score{font-size:1.5rem}
+  .team-name{font-size:.82rem}
+  table{font-size:.65rem;min-width:720px}
+  td{padding:6px 3px}
+  td.td-player{min-width:115px}
+  .leader-num{font-size:1.2rem}
+  .leader-name{font-size:.75rem}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<div class="topbar">
+  <div class="topbar-logo">🏀</div>
+  <div>
+    <div class="topbar-title">NAPOSTA U21</div>
+    <div class="topbar-sub">Básquetbol — Temporada 2025/26</div>
+  </div>
+  <div class="topbar-coach">DT: D'ANNUNZIO, GUSTAVO ADRIÁN</div>
+</div>
+
+<!-- SEASON SUMMARY CARDS -->
+<div class="summary">
+  <div class="scard"><div class="scard-label">Partidos</div><div class="scard-val">4</div><div class="scard-sub">3 victorias · 1 derrota</div></div>
+  <div class="scard"><div class="scard-label">Puntos/partido</div><div class="scard-val">80.3</div><div class="scard-sub">promedio temporada</div></div>
+  <div class="scard"><div class="scard-label">% TC 2P</div><div class="scard-val" style="color:#16a34a">57%</div><div class="scard-sub">90/158 en temporada</div></div>
+  <div class="scard"><div class="scard-label">% TC 3P</div><div class="scard-val" style="color:#ca8a04">33%</div><div class="scard-sub">32/96 en temporada</div></div>
+  <div class="scard"><div class="scard-label">% TL</div><div class="scard-val" style="color:#ca8a04">58%</div><div class="scard-sub">45/78 en temporada</div></div>
+  <div class="scard"><div class="scard-label">Rebotes/partido</div><div class="scard-val">34.8</div><div class="scard-sub">promedio temporada</div></div>
+</div>
+
+<div class="content">
+<div class="tabs">
+  <button class="tab active" onclick="showTab('prom',this)">Promedios</button>
+  <button class="tab" onclick="showTab('p1',this)">Partido 1 · vs Bahiense</button>
+  <button class="tab" onclick="showTab('p2',this)">Partido 2 · vs Pueyrredón</button>
+  <button class="tab" onclick="showTab('p3',this)">Partido 3 · vs Estrella</button>
+  <button class="tab" onclick="showTab('p4',this)">Partido 4 · vs Alem</button>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PROMEDIOS
+═══════════════════════════════════════ -->
+<div id="tab-prom" class="panel active">
+
+  <div class="section-title">Líderes de la temporada</div>
+  <div id="leaders-grid" class="leaders"></div>
+
+  <div class="section-title">Promedios individuales</div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="th-player" rowspan="2">Jugador</th>
+          <th rowspan="2">PJ</th><th rowspan="2">MIN</th><th rowspan="2">PTS</th>
+          <th colspan="2">TC 2P</th><th colspan="2">TC 3P</th><th colspan="2">TL</th>
+          <th colspan="3">Rebotes</th>
+          <th rowspan="2">AST</th><th rowspan="2">REC</th><th rowspan="2">PER</th>
+          <th rowspan="2">TC</th><th rowspan="2">TR</th>
+          <th rowspan="2">FC</th><th rowspan="2">FR</th><th rowspan="2">VAL</th>
+        </tr>
+        <tr>
+          <th>A/I</th><th>%</th><th>A/I</th><th>%</th><th>A/I</th><th>%</th>
+          <th>DEF</th><th>OF</th><th>Tot</th>
+        </tr>
+      </thead>
+      <tbody id="prom-tbody"></tbody>
+    </table>
+  </div>
+</div><!-- /tab-prom -->
+
+<!-- ═══════════════════════════════════════
+     PARTIDO 1 — vs Bahiense del Norte
+═══════════════════════════════════════ -->
+<div id="tab-p1" class="panel game-panel">
+  <div class="game-card">
+    <div class="game-matchup">
+      <div class="game-title">Partido 1 · De Visitante</div>
+      <div class="game-teams">
+        <span class="team-name">NAPOSTA U21</span>
+        <span class="team-score">78</span>
+        <span class="vs">–</span>
+        <span class="team-score">90</span>
+        <span class="team-name">Bahiense del Norte</span>
+      </div>
+      <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+        <span class="badge badge-loss">Derrota</span>
+        <span class="badge badge-visit">Visitante</span>
+      </div>
+    </div>
+    <div class="game-shooting">
+      <div class="shoot-box">
+        <div class="shoot-label">TC 2P</div>
+        <div class="shoot-frac">18/39</div>
+        <div class="shoot-pct pct-md">46%</div>
+      </div>
+      <div class="shoot-box">
+        <div class="shoot-label">TC 3P</div>
+        <div class="shoot-frac">10/27</div>
+        <div class="shoot-pct pct-md">37%</div>
+      </div>
+      <div class="shoot-box">
+        <div class="shoot-label">TL</div>
+        <div class="shoot-frac">12/20</div>
+        <div class="shoot-pct pct-md">60%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="th-player" rowspan="2">Jugador</th>
+          <th rowspan="2">MIN</th><th rowspan="2">PTS</th>
+          <th colspan="2">TC 2P</th><th colspan="2">TC 3P</th><th colspan="2">TL</th>
+          <th colspan="3">Rebotes</th>
+          <th rowspan="2">AST</th><th rowspan="2">REC</th><th rowspan="2">PER</th>
+          <th colspan="2">TAP</th><th colspan="2">FAL</th>
+          <th rowspan="2">VAL</th><th rowspan="2">+/-</th>
+        </tr>
+        <tr>
+          <th>A/I</th><th>%</th><th>A/I</th><th>%</th><th>A/I</th><th>%</th>
+          <th>DEF</th><th>OF</th><th>Tot</th>
+          <th>TC</th><th>TR</th><th>FC</th><th>FR</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="td-player"><span class="jersey">4</span>GERMAIN, FELIPE</td>
+          <td>22:49</td><td><b>15</b></td>
+          <td>0/3</td><td>0%</td>
+          <td>5/7</td><td>71%</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>1</td><td>0</td><td>1</td>
+          <td>1</td><td>0</td><td>1</td>
+          <td>0</td><td>0</td><td>1</td><td>0</td>
+          <td>10</td><td>6</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">5</span>GUERRERO, NICOLÁS<span class="starter-dot"></span></td>
+          <td>33:38</td><td><b>18</b></td>
+          <td>4/8</td><td>50%</td>
+          <td>1/8</td><td>13%</td>
+          <td>7/7</td><td>100%</td>
+          <td>7</td><td>0</td><td>7</td>
+          <td>4</td><td>4</td><td>3</td>
+          <td>0</td><td>1</td><td>3</td><td>4</td>
+          <td>19</td><td>-6</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">7</span>BARGA, SALVADOR IGNACIO</td>
+          <td>19:35</td><td><b>8</b></td>
+          <td>4/5</td><td>80%</td>
+          <td>0/2</td><td>0%</td>
+          <td>0/3</td><td>0%</td>
+          <td>3</td><td>1</td><td>4</td>
+          <td>0</td><td>1</td><td>2</td>
+          <td>0</td><td>0</td><td>4</td><td>2</td>
+          <td>3</td><td>3</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">8</span>SOSA NOVOLSELCOV, BAUTISTA</td>
+          <td>03:17</td><td>0</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>1</td><td>0</td>
+          <td>-2</td><td>2</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">9</span>MATARRESE, FRANCO</td>
+          <td>04:30</td><td>0</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>1</td><td>0</td>
+          <td>-1</td><td>-1</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">10</span>SOLÍS, TOMÁS JAVIER<span class="starter-dot"></span></td>
+          <td>31:55</td><td><b>9</b></td>
+          <td>1/5</td><td>20%</td>
+          <td>2/4</td><td>50%</td>
+          <td>1/2</td><td>50%</td>
+          <td>4</td><td>1</td><td>5</td>
+          <td>2</td><td>3</td><td>2</td>
+          <td>0</td><td>2</td><td>3</td><td>2</td>
+          <td>7</td><td>-12</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">11</span>MASTANDREA, BENJAMÍN<span class="starter-dot"></span><span class="cap-tag">CAP</span></td>
+          <td>18:58</td><td>0</td>
+          <td>0/2</td><td>0%</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>2</td><td>2</td><td>4</td>
+          <td>0</td><td>1</td><td>1</td>
+          <td>0</td><td>1</td><td>4</td><td>3</td>
+          <td>0</td><td>-22</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">12</span>PICCININI, ENZO</td>
+          <td>02:33</td><td>0</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>-6</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">13</span>BOSTAL, FEDERICO<span class="starter-dot"></span></td>
+          <td>32:55</td><td><b>9</b></td>
+          <td>4/9</td><td>44%</td>
+          <td>0/2</td><td>0%</td>
+          <td>1/2</td><td>50%</td>
+          <td>2</td><td>1</td><td>3</td>
+          <td>0</td><td>2</td><td>1</td>
+          <td>0</td><td>0</td><td>0</td><td>4</td>
+          <td>9</td><td>-13</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">14</span>D'ANNUNZIO, GABRIEL ALEJANDRO<span class="starter-dot"></span></td>
+          <td>29:46</td><td><b>19</b></td>
+          <td>5/7</td><td>71%</td>
+          <td>2/4</td><td>50%</td>
+          <td>3/6</td><td>50%</td>
+          <td>1</td><td>2</td><td>3</td>
+          <td>0</td><td>0</td><td>3</td>
+          <td>1</td><td>0</td><td>0</td><td>5</td>
+          <td>18</td><td>-11</td>
+        </tr>
+        <tr class="row-totals">
+          <td class="td-player" colspan="2">TOTALES</td>
+          <td>78</td>
+          <td>18/39</td><td>46%</td>
+          <td>10/27</td><td>37%</td>
+          <td>12/20</td><td>60%</td>
+          <td>20</td><td>7</td><td>27</td>
+          <td>6</td><td>12</td><td>13</td>
+          <td>1</td><td>5</td><td>17</td><td>20</td>
+          <td>63</td><td>0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="color:#94a3b8;font-size:.72rem;margin-top:8px;padding-left:4px">● Titular &nbsp;|&nbsp; <span style="background:#fbbf24;color:#713f12;padding:1px 4px;border-radius:3px;font-size:.65rem;font-weight:800">CAP</span> Capitán</p>
+</div><!-- /tab-p1 -->
+
+<!-- ═══════════════════════════════════════
+     PARTIDO 2 — vs Pueyrredón
+═══════════════════════════════════════ -->
+<div id="tab-p2" class="panel game-panel">
+  <div class="game-card">
+    <div class="game-matchup">
+      <div class="game-title">Partido 2 · De Local</div>
+      <div class="game-teams">
+        <span class="team-name">NAPOSTA U21</span>
+        <span class="team-score">78</span>
+        <span class="vs">–</span>
+        <span class="team-score">76</span>
+        <span class="team-name">Pueyrredón</span>
+      </div>
+      <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+        <span class="badge badge-win">Victoria</span>
+        <span class="badge badge-local">Local</span>
+      </div>
+    </div>
+    <div class="game-shooting">
+      <div class="shoot-box">
+        <div class="shoot-label">TC 2P</div>
+        <div class="shoot-frac">23/38</div>
+        <div class="shoot-pct pct-hi">61%</div>
+      </div>
+      <div class="shoot-box">
+        <div class="shoot-label">TC 3P</div>
+        <div class="shoot-frac">5/22</div>
+        <div class="shoot-pct pct-lo">23%</div>
+      </div>
+      <div class="shoot-box">
+        <div class="shoot-label">TL</div>
+        <div class="shoot-frac">17/35</div>
+        <div class="shoot-pct pct-md">49%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="th-player" rowspan="2">Jugador</th>
+          <th rowspan="2">MIN</th><th rowspan="2">PTS</th>
+          <th colspan="2">TC 2P</th><th colspan="2">TC 3P</th><th colspan="2">TL</th>
+          <th colspan="3">Rebotes</th>
+          <th rowspan="2">AST</th><th rowspan="2">REC</th><th rowspan="2">PER</th>
+          <th colspan="2">TAP</th><th colspan="2">FAL</th>
+          <th rowspan="2">VAL</th><th rowspan="2">+/-</th>
+        </tr>
+        <tr>
+          <th>A/I</th><th>%</th><th>A/I</th><th>%</th><th>A/I</th><th>%</th>
+          <th>DEF</th><th>OF</th><th>Tot</th>
+          <th>TC</th><th>TR</th><th>FC</th><th>FR</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="td-player"><span class="jersey">4</span>GERMAIN, FELIPE</td>
+          <td>17:21</td><td><b>3</b></td>
+          <td>0/1</td><td>0%</td>
+          <td>1/3</td><td>33%</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>3</td><td>0</td><td>3</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>3</td><td>0</td>
+          <td>0</td><td>0</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">5</span>GUERRERO, NICOLÁS<span class="starter-dot"></span></td>
+          <td>20:05</td><td><b>12</b></td>
+          <td>4/7</td><td>57%</td>
+          <td>0/5</td><td>0%</td>
+          <td>4/6</td><td>67%</td>
+          <td>4</td><td>1</td><td>5</td>
+          <td>4</td><td>0</td><td>1</td>
+          <td>1</td><td>0</td><td>1</td><td>5</td>
+          <td>15</td><td>-9</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">6</span>LONG, JUAN MANUEL</td>
+          <td>01:58</td><td>0</td>
+          <td>0/1</td><td>0%</td>
+          <td>0/1</td><td>0%</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>0</td><td>0</td>
+          <td>-2</td><td>-3</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">7</span>BARGA, SALVADOR IGNACIO<span class="starter-dot"></span></td>
+          <td>33:39</td><td><b>8</b></td>
+          <td>2/2</td><td>100%</td>
+          <td>1/4</td><td>25%</td>
+          <td>1/4</td><td>25%</td>
+          <td>1</td><td>2</td><td>3</td>
+          <td>4</td><td>0</td><td>3</td>
+          <td>0</td><td>1</td><td>1</td><td>2</td>
+          <td>6</td><td>1</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">8</span>SOSA NOVOLSELCOV, BAUTISTA</td>
+          <td>00:00</td><td>0</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">9</span>PICCININI, ENZO</td>
+          <td>11:37</td><td><b>5</b></td>
+          <td>1/1</td><td>100%</td>
+          <td>1/1</td><td>100%</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>2</td><td>0</td><td>2</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>2</td><td>0</td>
+          <td>5</td><td>11</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">10</span>SOLÍS, TOMÁS JAVIER<span class="starter-dot"></span></td>
+          <td>22:01</td><td><b>17</b></td>
+          <td>4/6</td><td>67%</td>
+          <td>0/2</td><td>0%</td>
+          <td>9/12</td><td>75%</td>
+          <td>8</td><td>1</td><td>9</td>
+          <td>2</td><td>1</td><td>1</td>
+          <td>0</td><td>1</td><td>3</td><td>6</td>
+          <td>23</td><td>9</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">11</span>MASTANDREA, BENJAMÍN<span class="cap-tag">CAP</span></td>
+          <td>28:01</td><td><b>6</b></td>
+          <td>1/4</td><td>25%</td>
+          <td>1/1</td><td>100%</td>
+          <td>1/8</td><td>13%</td>
+          <td>5</td><td>1</td><td>6</td>
+          <td>2</td><td>2</td><td>2</td>
+          <td>0</td><td>0</td><td>4</td><td>4</td>
+          <td>4</td><td>0</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">12</span>ANTONELLI, MATEO</td>
+          <td>04:03</td><td><b>2</b></td>
+          <td>1/1</td><td>100%</td>
+          <td>0/1</td><td>0%</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>1</td><td>0</td>
+          <td>0</td><td>-6</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">13</span>BOSTAL, FEDERICO<span class="starter-dot"></span></td>
+          <td>25:30</td><td><b>6</b></td>
+          <td>3/5</td><td>60%</td>
+          <td>0/1</td><td>0%</td>
+          <td>0/1</td><td>0%</td>
+          <td>7</td><td>3</td><td>10</td>
+          <td>1</td><td>0</td><td>0</td>
+          <td>1</td><td>0</td><td>4</td><td>2</td>
+          <td>12</td><td>6</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">14</span>D'ANNUNZIO, GABRIEL ALEJANDRO<span class="starter-dot"></span></td>
+          <td>35:40</td><td><b>19</b></td>
+          <td>7/10</td><td>70%</td>
+          <td>1/3</td><td>33%</td>
+          <td>2/4</td><td>50%</td>
+          <td>2</td><td>2</td><td>4</td>
+          <td>1</td><td>0</td><td>1</td>
+          <td>0</td><td>0</td><td>3</td><td>3</td>
+          <td>16</td><td>1</td>
+        </tr>
+        <tr class="row-totales">
+          <td class="td-player" colspan="2">TOTALES</td>
+          <td>78</td>
+          <td>23/38</td><td>61%</td>
+          <td>5/22</td><td>23%</td>
+          <td>17/35</td><td>49%</td>
+          <td>32</td><td>10</td><td>42</td>
+          <td>14</td><td>3</td><td>8</td>
+          <td>2</td><td>2</td><td>23</td><td>22</td>
+          <td>78</td><td>0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="color:#94a3b8;font-size:.72rem;margin-top:8px;padding-left:4px">● Titular &nbsp;|&nbsp; <span style="background:#fbbf24;color:#713f12;padding:1px 4px;border-radius:3px;font-size:.65rem;font-weight:800">CAP</span> Capitán</p>
+</div><!-- /tab-p2 -->
+
+<!-- ═══════════════════════════════════════
+     PARTIDO 3 — vs Estrella
+═══════════════════════════════════════ -->
+<div id="tab-p3" class="panel game-panel">
+  <div class="game-card">
+    <div class="game-matchup">
+      <div class="game-title">Partido 3 · De Visitante</div>
+      <div class="game-teams">
+        <span class="team-name">NAPOSTA U21</span>
+        <span class="team-score">79</span>
+        <span class="vs">–</span>
+        <span class="team-score">64</span>
+        <span class="team-name">Estrella</span>
+      </div>
+      <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+        <span class="badge badge-win">Victoria</span>
+        <span class="badge badge-visit">Visitante</span>
+      </div>
+    </div>
+    <div class="game-shooting">
+      <div class="shoot-box">
+        <div class="shoot-label">TC 2P</div>
+        <div class="shoot-frac">21/46</div>
+        <div class="shoot-pct pct-md">46%</div>
+      </div>
+      <div class="shoot-box">
+        <div class="shoot-label">TC 3P</div>
+        <div class="shoot-frac">8/25</div>
+        <div class="shoot-pct pct-lo">32%</div>
+      </div>
+      <div class="shoot-box">
+        <div class="shoot-label">TL</div>
+        <div class="shoot-frac">13/16</div>
+        <div class="shoot-pct pct-hi">81%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="th-player" rowspan="2">Jugador</th>
+          <th rowspan="2">MIN</th><th rowspan="2">PTS</th>
+          <th colspan="2">TC 2P</th><th colspan="2">TC 3P</th><th colspan="2">TL</th>
+          <th colspan="3">Rebotes</th>
+          <th rowspan="2">AST</th><th rowspan="2">REC</th><th rowspan="2">PER</th>
+          <th colspan="2">TAP</th><th colspan="2">FAL</th>
+          <th rowspan="2">VAL</th><th rowspan="2">+/-</th>
+        </tr>
+        <tr>
+          <th>A/I</th><th>%</th><th>A/I</th><th>%</th><th>A/I</th><th>%</th>
+          <th>DEF</th><th>OF</th><th>Tot</th>
+          <th>TC</th><th>TR</th><th>FC</th><th>FR</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="td-player"><span class="jersey">4</span>MATARRESE, FRANCO</td>
+          <td>00:00</td><td>0</td>
+          <td>0/0</td><td class="dash">—</td><td>0/0</td><td class="dash">—</td><td>0/0</td><td class="dash">—</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">5</span>GUERRERO, NICOLÁS<span class="starter-dot"></span></td>
+          <td>38:07</td><td><b>21</b></td>
+          <td>6/11</td><td>55%</td>
+          <td>1/7</td><td>14%</td>
+          <td>6/6</td><td>100%</td>
+          <td>8</td><td>2</td><td>10</td>
+          <td>3</td><td>10</td><td>5</td>
+          <td>0</td><td>0</td><td>2</td><td>5</td>
+          <td>31</td><td>+15</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">7</span>LONG, JUAN MANUEL</td>
+          <td>03:26</td><td>0</td>
+          <td>0/1</td><td>0%</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>1</td><td>0</td>
+          <td>-2</td><td>-1</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">8</span>SOSA NOVOLSELCOV, BAUTISTA</td>
+          <td>10:00</td><td><b>3</b></td>
+          <td>0/1</td><td>0%</td>
+          <td>1/2</td><td>50%</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>1</td><td>0</td><td>1</td>
+          <td>1</td><td>0</td><td>1</td>
+          <td>0</td><td>0</td><td>0</td><td>1</td>
+          <td>2</td><td>+10</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">9</span>PICCININI, ENZO</td>
+          <td>14:08</td><td><b>2</b></td>
+          <td>1/2</td><td>50%</td>
+          <td>0/1</td><td>0%</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>1</td><td>0</td><td>1</td>
+          <td>1</td><td>1</td><td>0</td>
+          <td>0</td><td>0</td><td>0</td><td>0</td>
+          <td>1</td><td>-6</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">10</span>SOLÍS, TOMÁS JAVIER<span class="starter-dot"></span></td>
+          <td>37:16</td><td><b>15</b></td>
+          <td>3/8</td><td>38%</td>
+          <td>2/7</td><td>29%</td>
+          <td>3/3</td><td>100%</td>
+          <td>3</td><td>3</td><td>6</td>
+          <td>1</td><td>0</td><td>1</td>
+          <td>0</td><td>0</td><td>2</td><td>3</td>
+          <td>12</td><td>+15</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">11</span>MASTANDREA, BENJAMÍN<span class="starter-dot"></span><span class="cap-tag">CAP</span></td>
+          <td>29:58</td><td><b>6</b></td>
+          <td>3/5</td><td>60%</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0/1</td><td>0%</td>
+          <td>11</td><td>0</td><td>11</td>
+          <td>5</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>3</td><td>3</td>
+          <td>18</td><td>+18</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">12</span>ANTONELLI, MATEO</td>
+          <td>08:00</td><td><b>3</b></td>
+          <td>0/1</td><td>0%</td>
+          <td>1/2</td><td>50%</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0</td><td>1</td><td>1</td>
+          <td>0</td><td>0</td><td>1</td>
+          <td>0</td><td>0</td><td>1</td><td>0</td>
+          <td>2</td><td>3</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">13</span>BOSTAL, FEDERICO<span class="starter-dot"></span></td>
+          <td>34:43</td><td><b>10</b></td>
+          <td>5/8</td><td>63%</td>
+          <td>0/1</td><td>0%</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>4</td><td>2</td><td>6</td>
+          <td>0</td><td>1</td><td>1</td>
+          <td>1</td><td>0</td><td>2</td><td>1</td>
+          <td>11</td><td>+12</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">14</span>D'ANNUNZIO, GABRIEL ALEJANDRO<span class="starter-dot"></span></td>
+          <td>24:19</td><td><b>19</b></td>
+          <td>3/9</td><td>33%</td>
+          <td>3/4</td><td>75%</td>
+          <td>4/6</td><td>67%</td>
+          <td>0</td><td>1</td><td>1</td>
+          <td>1</td><td>1</td><td>0</td>
+          <td>0</td><td>0</td><td>4</td><td>3</td>
+          <td>15</td><td>9</td>
+        </tr>
+        <tr class="row-totals">
+          <td class="td-player" colspan="2">TOTALES</td>
+          <td>79</td>
+          <td>21/46</td><td>46%</td>
+          <td>8/25</td><td>32%</td>
+          <td>13/16</td><td>81%</td>
+          <td>28</td><td>9</td><td>37</td>
+          <td>11</td><td>11</td><td>8</td>
+          <td>2</td><td>0</td><td>16</td><td>15</td>
+          <td>86</td><td>—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="color:#94a3b8;font-size:.72rem;margin-top:8px;padding-left:4px">● Titular &nbsp;|&nbsp; <span style="background:#fbbf24;color:#713f12;padding:1px 4px;border-radius:3px;font-size:.65rem;font-weight:800">CAP</span> Capitán</p>
+</div><!-- /tab-p3 -->
+
+<!-- ═══════════════════════════════════════
+     PARTIDO 4 — vs Leandro N. Alem
+═══════════════════════════════════════ -->
+<div id="tab-p4" class="panel game-panel">
+  <div class="game-card">
+    <div class="game-matchup">
+      <div class="game-title">Partido 4 · De Visitante</div>
+      <div class="game-teams">
+        <span class="team-name">NAPOSTA U21</span>
+        <span class="team-score">86</span>
+        <span class="vs">–</span>
+        <span class="team-score">64</span>
+        <span class="team-name">Leandro N. Alem</span>
+      </div>
+      <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+        <span class="badge badge-win">Victoria</span>
+        <span class="badge badge-visit">Visitante</span>
+      </div>
+    </div>
+    <div class="game-shooting">
+      <div class="shoot-box">
+        <div class="shoot-label">TC 2P</div>
+        <div class="shoot-frac">28/35</div>
+        <div class="shoot-pct pct-hi">80%</div>
+      </div>
+      <div class="shoot-box">
+        <div class="shoot-label">TC 3P</div>
+        <div class="shoot-frac">9/22</div>
+        <div class="shoot-pct pct-md">41%</div>
+      </div>
+      <div class="shoot-box">
+        <div class="shoot-label">TL</div>
+        <div class="shoot-frac">3/7</div>
+        <div class="shoot-pct pct-md">43%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="th-player" rowspan="2">Jugador</th>
+          <th rowspan="2">MIN</th><th rowspan="2">PTS</th>
+          <th colspan="2">TC 2P</th><th colspan="2">TC 3P</th><th colspan="2">TL</th>
+          <th colspan="3">Rebotes</th>
+          <th rowspan="2">AST</th><th rowspan="2">REC</th><th rowspan="2">PER</th>
+          <th colspan="2">TAP</th><th colspan="2">FAL</th>
+          <th rowspan="2">VAL</th><th rowspan="2">+/-</th>
+        </tr>
+        <tr>
+          <th>A/I</th><th>%</th><th>A/I</th><th>%</th><th>A/I</th><th>%</th>
+          <th>DEF</th><th>OF</th><th>Tot</th>
+          <th>TC</th><th>TR</th><th>FC</th><th>FR</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="td-player"><span class="jersey">4</span>BARGA, SALVADOR IGNACIO</td>
+          <td>00:00</td><td>0</td>
+          <td>0/0</td><td class="dash">—</td><td>0/0</td><td class="dash">—</td><td>0/0</td><td class="dash">—</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">5</span>GUERRERO, NICOLÁS<span class="starter-dot"></span></td>
+          <td>35:59</td><td><b>27</b></td>
+          <td>10/12</td><td>83%</td>
+          <td>2/6</td><td>33%</td>
+          <td>1/2</td><td>50%</td>
+          <td>7</td><td>0</td><td>7</td>
+          <td>2</td><td>3</td><td>1</td>
+          <td>0</td><td>0</td><td>2</td><td>3</td>
+          <td>32</td><td>+26</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">7</span>LONG, JUAN MANUEL</td>
+          <td>06:59</td><td><b>6</b></td>
+          <td>3/3</td><td>100%</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0</td><td>1</td><td>1</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>2</td><td>0</td>
+          <td>5</td><td>+9</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">9</span>PICCININI, ENZO</td>
+          <td>18:49</td><td><b>8</b></td>
+          <td>1/1</td><td>100%</td>
+          <td>2/3</td><td>67%</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>2</td><td>0</td><td>2</td>
+          <td>0</td><td>0</td><td>1</td>
+          <td>0</td><td>0</td><td>2</td><td>0</td>
+          <td>6</td><td>+4</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">10</span>SOLÍS, TOMÁS JAVIER<span class="starter-dot"></span></td>
+          <td>30:41</td><td><b>12</b></td>
+          <td>4/5</td><td>80%</td>
+          <td>1/6</td><td>17%</td>
+          <td>1/2</td><td>50%</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>1</td><td>0</td><td>2</td>
+          <td>0</td><td>0</td><td>3</td><td>1</td>
+          <td>2</td><td>+24</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">11</span>MASTANDREA, BENJAMÍN<span class="starter-dot"></span><span class="cap-tag">CAP</span></td>
+          <td>23:36</td><td>0</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>3</td><td>2</td><td>5</td>
+          <td>1</td><td>0</td><td>2</td>
+          <td>0</td><td>0</td><td>0</td><td>0</td>
+          <td>4</td><td>+12</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">12</span>ANTONELLI, MATEO</td>
+          <td>12:32</td><td><b>2</b></td>
+          <td>1/1</td><td>100%</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>1</td><td>0</td><td>1</td>
+          <td>0</td><td>0</td><td>0</td>
+          <td>0</td><td>0</td><td>1</td><td>0</td>
+          <td>2</td><td>-4</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">13</span>BOSTAL, FEDERICO<span class="starter-dot"></span></td>
+          <td>34:26</td><td><b>24</b></td>
+          <td>7/7</td><td>100%</td>
+          <td>3/4</td><td>75%</td>
+          <td>1/3</td><td>33%</td>
+          <td>9</td><td>1</td><td>10</td>
+          <td>0</td><td>0</td><td>2</td>
+          <td>0</td><td>0</td><td>2</td><td>1</td>
+          <td>28</td><td>+30</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">14</span>D'ANNUNZIO, GABRIEL ALEJANDRO<span class="starter-dot"></span></td>
+          <td>33:11</td><td><b>7</b></td>
+          <td>2/5</td><td>40%</td>
+          <td>1/3</td><td>33%</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>5</td><td>1</td><td>6</td>
+          <td>0</td><td>0</td><td>2</td>
+          <td>0</td><td>0</td><td>1</td><td>0</td>
+          <td>5</td><td>+13</td>
+        </tr>
+        <tr>
+          <td class="td-player"><span class="jersey">15</span>KAPPES, JOAQUÍN</td>
+          <td>03:42</td><td>0</td>
+          <td>0/1</td><td>0%</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>0/0</td><td class="dash">—</td>
+          <td>1</td><td>0</td><td>1</td>
+          <td>0</td><td>0</td><td>1</td>
+          <td>0</td><td>0</td><td>1</td><td>0</td>
+          <td>-2</td><td>-4</td>
+        </tr>
+        <tr class="row-totals">
+          <td class="td-player" colspan="2">TOTALES</td>
+          <td>86</td>
+          <td>28/35</td><td>80%</td>
+          <td>9/22</td><td>41%</td>
+          <td>3/7</td><td>43%</td>
+          <td>28</td><td>5</td><td>33</td>
+          <td>4</td><td>3</td><td>11</td>
+          <td>0</td><td>0</td><td>14</td><td>5</td>
+          <td>82</td><td>0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="color:#94a3b8;font-size:.72rem;margin-top:8px;padding-left:4px">● Titular &nbsp;|&nbsp; <span style="background:#fbbf24;color:#713f12;padding:1px 4px;border-radius:3px;font-size:.65rem;font-weight:800">CAP</span> Capitán</p>
+</div><!-- /tab-p4 -->
+
+</div><!-- /content -->
+
+<footer>Naposta U21 · Básquetbol · DT: D'Annunzio, Gustavo Adrián &nbsp;·&nbsp; Datos tomados de planillas oficiales</footer>
+
+<script>
+function showTab(id,btn){
+  var panels=document.querySelectorAll('.panel');
+  var tabs=document.querySelectorAll('.tab');
+  for(var i=0;i<panels.length;i++) panels[i].classList.remove('active');
+  for(var i=0;i<tabs.length;i++)   tabs[i].classList.remove('active');
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function buildStats(){
+  function parseFrac(s){var m=String(s).match(/^(\d+)\/(\d+)$/);return m?{a:+m[1],i:+m[2]}:null;}
+  function parseMin(s){var m=String(s).match(/(\d+):(\d+)/);return m?+m[1]*60+ +m[2]:0;}
+  function pad2(n){return n<10?'0'+n:String(n);}
+  function fmtMin(sec){var m=Math.floor(sec/60),s=Math.round(sec%60);return pad2(m)+':'+pad2(s);}
+  function n1(v,pj){return(v/pj).toFixed(1);}
+  function pct(a,i){return i>0?Math.round(a/i*100)+'%':null;}
+  function getKey(tdEl){
+    var c=tdEl.cloneNode(true);
+    var nodes=c.querySelectorAll('span,small');
+    for(var i=nodes.length-1;i>=0;i--) nodes[i].parentNode.removeChild(nodes[i]);
+    return c.textContent.replace(/\s+/g,' ').trim();
+  }
+  function shortN(k){var p=k.split(',');return p.length<2?k:p[0].trim()+', '+p[1].trim().charAt(0)+'.';}
+
+  var map={},order=[];
+  var rows=document.querySelectorAll('.game-panel tbody tr');
+  for(var ri=0;ri<rows.length;ri++){
+    var tr=rows[ri];
+    if(tr.className.indexOf('row-total')>=0) continue;
+    var tds=tr.querySelectorAll('td');
+    if(tds.length<20) continue;
+    var minSec=parseMin(tds[1].textContent.trim());
+    if(minSec===0) continue;
+    var key=getKey(tds[0]);
+    if(!map[key]){
+      order.push(key);
+      map[key]={key:key,nameHtml:tds[0].innerHTML,pj:0,minSec:0,pts:0,
+        tc2a:0,tc2i:0,tc3a:0,tc3i:0,tla:0,tli:0,
+        def:0,of:0,tot:0,ast:0,rec:0,per:0,tc:0,tr:0,fc:0,fr:0,val:0};
+    }
+    var p=map[key];
+    p.pj++; p.minSec+=minSec;
+    p.pts+=parseInt(tds[2].textContent)||0;
+    var f2=parseFrac(tds[3].textContent.trim()); if(f2){p.tc2a+=f2.a;p.tc2i+=f2.i;}
+    var f3=parseFrac(tds[5].textContent.trim()); if(f3){p.tc3a+=f3.a;p.tc3i+=f3.i;}
+    var fl=parseFrac(tds[7].textContent.trim()); if(fl){p.tla +=fl.a;p.tli +=fl.i;}
+    p.def+=parseInt(tds[9].textContent)||0;
+    p.of +=parseInt(tds[10].textContent)||0;
+    p.tot+=parseInt(tds[11].textContent)||0;
+    p.ast+=parseInt(tds[12].textContent)||0;
+    p.rec+=parseInt(tds[13].textContent)||0;
+    p.per+=parseInt(tds[14].textContent)||0;
+    p.tc +=parseInt(tds[15].textContent)||0;
+    p.tr +=parseInt(tds[16].textContent)||0;
+    p.fc +=parseInt(tds[17].textContent)||0;
+    p.fr +=parseInt(tds[18].textContent)||0;
+    p.val+=parseInt(tds[19].textContent)||0;
+  }
+
+  order.sort(function(a,b){return(map[b].pts/map[b].pj)-(map[a].pts/map[a].pj);});
+
+  /* ── Promedios tbody ── */
+  var tbody=document.getElementById('prom-tbody');
+  if(tbody){
+    var rows_html='';
+    for(var oi=0;oi<order.length;oi++){
+      var p=map[order[oi]],n=p.pj;
+      var label=n+(n===1?' partido':' partidos');
+      rows_html+='<tr>';
+      rows_html+='<td class="td-player">'+p.nameHtml+'<small>'+label+'</small></td>';
+      rows_html+='<td>'+n+'</td>';
+      rows_html+='<td>'+fmtMin(Math.round(p.minSec/n))+'</td>';
+      rows_html+='<td><b>'+n1(p.pts,n)+'</b></td>';
+      rows_html+='<td>'+p.tc2a+'/'+p.tc2i+'</td><td>'+(pct(p.tc2a,p.tc2i)||'—')+'</td>';
+      rows_html+='<td>'+p.tc3a+'/'+p.tc3i+'</td><td>'+(pct(p.tc3a,p.tc3i)||'—')+'</td>';
+      rows_html+='<td>'+p.tla+'/'+p.tli+'</td><td>'+(pct(p.tla,p.tli)||'—')+'</td>';
+      rows_html+='<td>'+n1(p.def,n)+'</td><td>'+n1(p.of,n)+'</td><td>'+n1(p.tot,n)+'</td>';
+      rows_html+='<td>'+n1(p.ast,n)+'</td><td>'+n1(p.rec,n)+'</td><td>'+n1(p.per,n)+'</td>';
+      rows_html+='<td>'+n1(p.tc,n)+'</td><td>'+n1(p.tr,n)+'</td>';
+      rows_html+='<td>'+n1(p.fc,n)+'</td><td>'+n1(p.fr,n)+'</td>';
+      rows_html+='<td>'+n1(p.val,n)+'</td>';
+      rows_html+='</tr>';
+    }
+    tbody.innerHTML=rows_html;
+  }
+
+  /* ── Líderes ── */
+  var grid=document.getElementById('leaders-grid');
+  if(!grid) return;
+  var vals=[];
+  for(var oi=0;oi<order.length;oi++) vals.push(map[order[oi]]);
+  function best(arr,fn){
+    if(!arr.length) return null;
+    var b=arr[0];
+    for(var i=1;i<arr.length;i++) if(fn(arr[i])>fn(b)) b=arr[i];
+    return b;
+  }
+  function filt(arr,fn){var r=[];for(var i=0;i<arr.length;i++) if(fn(arr[i])) r.push(arr[i]);return r;}
+  var lPts=best(vals,function(p){return p.pts/p.pj;});
+  var lReb=best(vals,function(p){return p.tot/p.pj;});
+  var lAst=best(vals,function(p){return p.ast/p.pj;});
+  var lRec=best(vals,function(p){return p.rec/p.pj;});
+  var lVal=best(vals,function(p){return p.val/p.pj;});
+  var l2p=best(filt(vals,function(p){return p.tc2i>=5;}),function(p){return p.tc2a/p.tc2i;});
+  var l3p=best(filt(vals,function(p){return p.tc3i>=5;}),function(p){return p.tc3a/p.tc3i;});
+  var lTl =best(filt(vals,function(p){return p.tli>=5; }),function(p){return p.tla/p.tli;});
+  function card(cat,name,num,det){
+    return '<div class="leader"><div class="leader-cat">'+cat+'</div><div class="leader-name">'+name+'</div><div class="leader-num">'+num+'</div><div class="leader-detail">'+det+'</div></div>';
+  }
+  var lhtml='';
+  if(lPts) lhtml+=card('Puntos',     shortN(lPts.key),n1(lPts.pts,lPts.pj),'pts/partido · '+lPts.pj+' PJ');
+  if(lReb) lhtml+=card('Rebotes',    shortN(lReb.key),n1(lReb.tot,lReb.pj),'reb/partido · '+lReb.pj+' PJ');
+  if(lAst) lhtml+=card('Asistencias',shortN(lAst.key),n1(lAst.ast,lAst.pj),'ast/partido · '+lAst.pj+' PJ');
+  if(lRec) lhtml+=card('Robos',      shortN(lRec.key),n1(lRec.rec,lRec.pj),'rob/partido · '+lRec.pj+' PJ');
+  if(lVal) lhtml+=card('Valoración', shortN(lVal.key),n1(lVal.val,lVal.pj),'val/partido · '+lVal.pj+' PJ');
+  if(l3p)  lhtml+=card('% TC 3P',    shortN(l3p.key), pct(l3p.tc3a,l3p.tc3i),l3p.tc3a+'/'+l3p.tc3i+' intentos');
+  if(l2p)  lhtml+=card('% TC 2P',    shortN(l2p.key), pct(l2p.tc2a,l2p.tc2i),l2p.tc2a+'/'+l2p.tc2i+' intentos');
+  if(lTl)  lhtml+=card('% TL',       shortN(lTl.key), pct(lTl.tla,lTl.tli),  lTl.tla+'/'+lTl.tli+' intentos');
+  grid.innerHTML=lhtml;
+}
+buildStats();
+</script>
+</body>
+</html>
