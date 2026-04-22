@@ -90,6 +90,17 @@ td.dash{color:#e2e8f0}
 .leader-detail{font-size:.68rem;color:#94a3b8;margin-top:2px}
 .section-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#f97316;border-left:3px solid #f97316;padding-left:10px;margin:24px 0 12px}
 
+/* ── GAME TOP (header compacto sobre tabs) ── */
+#game-top{padding:10px 24px 14px}
+#game-top .game-card{padding:10px 18px;gap:12px;border-top:3px solid #f97316}
+#game-top .game-title{font-size:.65rem}
+#game-top .team-name{font-size:.88rem}
+#game-top .team-score{font-size:1.5rem;min-width:36px}
+#game-top .game-shooting{min-width:200px;gap:6px}
+#game-top .shoot-box{padding:5px 6px}
+#game-top .shoot-frac{font-size:.78rem}
+#game-top .shoot-pct{font-size:.67rem}
+
 /* ── FIXTURE ── */
 .fixture-list{background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.07);overflow:hidden;margin-bottom:16px}
 .fixture-row{display:flex;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid #f1f5f9;transition:background .1s}
@@ -128,6 +139,7 @@ footer{text-align:center;color:#94a3b8;font-size:.72rem;padding:20px;border-top:
   thead tr:first-child th{padding:5px 4px;font-size:.58rem}
   thead tr:last-child th{padding:6px 4px;font-size:.62rem}
 }
+
 @media(max-width:480px){
   .scard-val{font-size:1.2rem}
   .scard-label{font-size:.6rem}
@@ -161,6 +173,93 @@ footer{text-align:center;color:#94a3b8;font-size:.72rem;padding:20px;border-top:
   <div class="scard"><div class="scard-label">% TC 3P</div><div class="scard-val" style="color:#ca8a04">33%</div><div class="scard-sub">32/96 en temporada</div></div>
   <div class="scard"><div class="scard-label">% TL</div><div class="scard-val" style="color:#ca8a04">58%</div><div class="scard-sub">45/78 en temporada</div></div>
   <div class="scard"><div class="scard-label">Rebotes/partido</div><div class="scard-val">34.8</div><div class="scard-sub">promedio temporada</div></div>
+</div>
+
+<div id="game-top" style="display:none">
+  <div id="gc-p1" class="game-card" style="display:none;margin-bottom:0">
+    <div class="game-matchup">
+      <div class="game-title">Partido 1 · De Visitante</div>
+      <div class="game-teams">
+        <span class="team-name">NAPOSTA U21</span>
+        <span class="team-score">78</span>
+        <span class="vs">–</span>
+        <span class="team-score">90</span>
+        <span class="team-name">Bahiense del Norte</span>
+      </div>
+      <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+        <span class="badge badge-loss">Derrota</span>
+        <span class="badge badge-visit">Visitante</span>
+      </div>
+    </div>
+    <div class="game-shooting">
+      <div class="shoot-box"><div class="shoot-label">TC 2P</div><div class="shoot-frac">18/39</div><div class="shoot-pct pct-md">46%</div></div>
+      <div class="shoot-box"><div class="shoot-label">TC 3P</div><div class="shoot-frac">10/27</div><div class="shoot-pct pct-md">37%</div></div>
+      <div class="shoot-box"><div class="shoot-label">TL</div><div class="shoot-frac">12/20</div><div class="shoot-pct pct-md">60%</div></div>
+    </div>
+  </div>
+  <div id="gc-p2" class="game-card" style="display:none;margin-bottom:0">
+    <div class="game-matchup">
+      <div class="game-title">Partido 2 · De Local</div>
+      <div class="game-teams">
+        <span class="team-name">NAPOSTA U21</span>
+        <span class="team-score">78</span>
+        <span class="vs">–</span>
+        <span class="team-score">76</span>
+        <span class="team-name">Pueyrredón</span>
+      </div>
+      <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+        <span class="badge badge-win">Victoria</span>
+        <span class="badge badge-local">Local</span>
+      </div>
+    </div>
+    <div class="game-shooting">
+      <div class="shoot-box"><div class="shoot-label">TC 2P</div><div class="shoot-frac">23/38</div><div class="shoot-pct pct-hi">61%</div></div>
+      <div class="shoot-box"><div class="shoot-label">TC 3P</div><div class="shoot-frac">5/22</div><div class="shoot-pct pct-lo">23%</div></div>
+      <div class="shoot-box"><div class="shoot-label">TL</div><div class="shoot-frac">17/35</div><div class="shoot-pct pct-md">49%</div></div>
+    </div>
+  </div>
+  <div id="gc-p3" class="game-card" style="display:none;margin-bottom:0">
+    <div class="game-matchup">
+      <div class="game-title">Partido 3 · De Visitante</div>
+      <div class="game-teams">
+        <span class="team-name">NAPOSTA U21</span>
+        <span class="team-score">79</span>
+        <span class="vs">–</span>
+        <span class="team-score">64</span>
+        <span class="team-name">Estrella</span>
+      </div>
+      <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+        <span class="badge badge-win">Victoria</span>
+        <span class="badge badge-visit">Visitante</span>
+      </div>
+    </div>
+    <div class="game-shooting">
+      <div class="shoot-box"><div class="shoot-label">TC 2P</div><div class="shoot-frac">21/46</div><div class="shoot-pct pct-md">46%</div></div>
+      <div class="shoot-box"><div class="shoot-label">TC 3P</div><div class="shoot-frac">8/25</div><div class="shoot-pct pct-lo">32%</div></div>
+      <div class="shoot-box"><div class="shoot-label">TL</div><div class="shoot-frac">13/16</div><div class="shoot-pct pct-hi">81%</div></div>
+    </div>
+  </div>
+  <div id="gc-p4" class="game-card" style="display:none;margin-bottom:0">
+    <div class="game-matchup">
+      <div class="game-title">Partido 4 · De Visitante</div>
+      <div class="game-teams">
+        <span class="team-name">NAPOSTA U21</span>
+        <span class="team-score">86</span>
+        <span class="vs">–</span>
+        <span class="team-score">64</span>
+        <span class="team-name">Leandro N. Alem</span>
+      </div>
+      <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+        <span class="badge badge-win">Victoria</span>
+        <span class="badge badge-visit">Visitante</span>
+      </div>
+    </div>
+    <div class="game-shooting">
+      <div class="shoot-box"><div class="shoot-label">TC 2P</div><div class="shoot-frac">28/35</div><div class="shoot-pct pct-hi">80%</div></div>
+      <div class="shoot-box"><div class="shoot-label">TC 3P</div><div class="shoot-frac">9/22</div><div class="shoot-pct pct-md">41%</div></div>
+      <div class="shoot-box"><div class="shoot-label">TL</div><div class="shoot-frac">3/7</div><div class="shoot-pct pct-md">43%</div></div>
+    </div>
+  </div>
 </div>
 
 <div class="content">
@@ -208,40 +307,6 @@ footer{text-align:center;color:#94a3b8;font-size:.72rem;padding:20px;border-top:
      PARTIDO 1 — vs Bahiense del Norte
 ═══════════════════════════════════════ -->
 <div id="tab-p1" class="panel game-panel">
-  <div class="game-card">
-    <div class="game-matchup">
-      <div class="game-title">Partido 1 · De Visitante</div>
-      <div class="game-teams">
-        <span class="team-name">NAPOSTA U21</span>
-        <span class="team-score">78</span>
-        <span class="vs">–</span>
-        <span class="team-score">90</span>
-        <span class="team-name">Bahiense del Norte</span>
-      </div>
-      <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
-        <span class="badge badge-loss">Derrota</span>
-        <span class="badge badge-visit">Visitante</span>
-      </div>
-    </div>
-    <div class="game-shooting">
-      <div class="shoot-box">
-        <div class="shoot-label">TC 2P</div>
-        <div class="shoot-frac">18/39</div>
-        <div class="shoot-pct pct-md">46%</div>
-      </div>
-      <div class="shoot-box">
-        <div class="shoot-label">TC 3P</div>
-        <div class="shoot-frac">10/27</div>
-        <div class="shoot-pct pct-md">37%</div>
-      </div>
-      <div class="shoot-box">
-        <div class="shoot-label">TL</div>
-        <div class="shoot-frac">12/20</div>
-        <div class="shoot-pct pct-md">60%</div>
-      </div>
-    </div>
-  </div>
-
   <div class="tbl-wrap">
     <table>
       <thead>
@@ -392,40 +457,6 @@ footer{text-align:center;color:#94a3b8;font-size:.72rem;padding:20px;border-top:
      PARTIDO 2 — vs Pueyrredón
 ═══════════════════════════════════════ -->
 <div id="tab-p2" class="panel game-panel">
-  <div class="game-card">
-    <div class="game-matchup">
-      <div class="game-title">Partido 2 · De Local</div>
-      <div class="game-teams">
-        <span class="team-name">NAPOSTA U21</span>
-        <span class="team-score">78</span>
-        <span class="vs">–</span>
-        <span class="team-score">76</span>
-        <span class="team-name">Pueyrredón</span>
-      </div>
-      <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
-        <span class="badge badge-win">Victoria</span>
-        <span class="badge badge-local">Local</span>
-      </div>
-    </div>
-    <div class="game-shooting">
-      <div class="shoot-box">
-        <div class="shoot-label">TC 2P</div>
-        <div class="shoot-frac">23/38</div>
-        <div class="shoot-pct pct-hi">61%</div>
-      </div>
-      <div class="shoot-box">
-        <div class="shoot-label">TC 3P</div>
-        <div class="shoot-frac">5/22</div>
-        <div class="shoot-pct pct-lo">23%</div>
-      </div>
-      <div class="shoot-box">
-        <div class="shoot-label">TL</div>
-        <div class="shoot-frac">17/35</div>
-        <div class="shoot-pct pct-md">49%</div>
-      </div>
-    </div>
-  </div>
-
   <div class="tbl-wrap">
     <table>
       <thead>
@@ -587,40 +618,6 @@ footer{text-align:center;color:#94a3b8;font-size:.72rem;padding:20px;border-top:
      PARTIDO 3 — vs Estrella
 ═══════════════════════════════════════ -->
 <div id="tab-p3" class="panel game-panel">
-  <div class="game-card">
-    <div class="game-matchup">
-      <div class="game-title">Partido 3 · De Visitante</div>
-      <div class="game-teams">
-        <span class="team-name">NAPOSTA U21</span>
-        <span class="team-score">79</span>
-        <span class="vs">–</span>
-        <span class="team-score">64</span>
-        <span class="team-name">Estrella</span>
-      </div>
-      <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
-        <span class="badge badge-win">Victoria</span>
-        <span class="badge badge-visit">Visitante</span>
-      </div>
-    </div>
-    <div class="game-shooting">
-      <div class="shoot-box">
-        <div class="shoot-label">TC 2P</div>
-        <div class="shoot-frac">21/46</div>
-        <div class="shoot-pct pct-md">46%</div>
-      </div>
-      <div class="shoot-box">
-        <div class="shoot-label">TC 3P</div>
-        <div class="shoot-frac">8/25</div>
-        <div class="shoot-pct pct-lo">32%</div>
-      </div>
-      <div class="shoot-box">
-        <div class="shoot-label">TL</div>
-        <div class="shoot-frac">13/16</div>
-        <div class="shoot-pct pct-hi">81%</div>
-      </div>
-    </div>
-  </div>
-
   <div class="tbl-wrap">
     <table>
       <thead>
@@ -769,40 +766,6 @@ footer{text-align:center;color:#94a3b8;font-size:.72rem;padding:20px;border-top:
      PARTIDO 4 — vs Leandro N. Alem
 ═══════════════════════════════════════ -->
 <div id="tab-p4" class="panel game-panel">
-  <div class="game-card">
-    <div class="game-matchup">
-      <div class="game-title">Partido 4 · De Visitante</div>
-      <div class="game-teams">
-        <span class="team-name">NAPOSTA U21</span>
-        <span class="team-score">86</span>
-        <span class="vs">–</span>
-        <span class="team-score">64</span>
-        <span class="team-name">Leandro N. Alem</span>
-      </div>
-      <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
-        <span class="badge badge-win">Victoria</span>
-        <span class="badge badge-visit">Visitante</span>
-      </div>
-    </div>
-    <div class="game-shooting">
-      <div class="shoot-box">
-        <div class="shoot-label">TC 2P</div>
-        <div class="shoot-frac">28/35</div>
-        <div class="shoot-pct pct-hi">80%</div>
-      </div>
-      <div class="shoot-box">
-        <div class="shoot-label">TC 3P</div>
-        <div class="shoot-frac">9/22</div>
-        <div class="shoot-pct pct-md">41%</div>
-      </div>
-      <div class="shoot-box">
-        <div class="shoot-label">TL</div>
-        <div class="shoot-frac">3/7</div>
-        <div class="shoot-pct pct-md">43%</div>
-      </div>
-    </div>
-  </div>
-
   <div class="tbl-wrap">
     <table>
       <thead>
@@ -1102,6 +1065,14 @@ function showTab(id,btn){
   for(var i=0;i<tabs.length;i++)   tabs[i].classList.remove('active');
   document.getElementById('tab-'+id).classList.add('active');
   btn.classList.add('active');
+  var isGame=id==='p1'||id==='p2'||id==='p3'||id==='p4';
+  document.querySelector('.summary').style.display=isGame?'none':'flex';
+  document.getElementById('game-top').style.display=isGame?'block':'none';
+  if(isGame){
+    ['p1','p2','p3','p4'].forEach(function(p){
+      document.getElementById('gc-'+p).style.display=(p===id)?'flex':'none';
+    });
+  }
 }
 
 function buildStats(){
