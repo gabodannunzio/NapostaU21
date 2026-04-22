@@ -90,6 +90,20 @@ td.dash{color:#e2e8f0}
 .leader-detail{font-size:.68rem;color:#94a3b8;margin-top:2px}
 .section-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#f97316;border-left:3px solid #f97316;padding-left:10px;margin:24px 0 12px}
 
+/* ── FIXTURE ── */
+.fixture-list{background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.07);overflow:hidden;margin-bottom:16px}
+.fixture-row{display:flex;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid #f1f5f9;transition:background .1s}
+.fixture-row:last-child{border-bottom:none}
+.fixture-row:hover{background:#fff7ed}
+.fixture-num{width:26px;height:26px;background:#f1f5f9;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;color:#64748b;flex-shrink:0}
+.fixture-rival{flex:1;font-size:.88rem;font-weight:600;color:#1a1a2e}
+.fixture-score{font-size:.92rem;font-weight:800;min-width:72px;text-align:right;white-space:nowrap}
+.fixture-score .s-nap{color:#f97316}
+.fixture-score .s-riv{color:#1a1a2e}
+.fixture-score .s-sep{color:#94a3b8;margin:0 3px}
+.fixture-pending{font-size:.78rem;color:#cbd5e1;min-width:72px;text-align:right}
+.badge-pending{background:#f1f5f9;color:#94a3b8}
+
 footer{text-align:center;color:#94a3b8;font-size:.72rem;padding:20px;border-top:1px solid #e2e8f0;margin-top:8px}
 
 @media(max-width:768px){
@@ -152,6 +166,7 @@ footer{text-align:center;color:#94a3b8;font-size:.72rem;padding:20px;border-top:
 <div class="content">
 <div class="tabs">
   <button class="tab active" onclick="showTab('prom',this)">Promedios</button>
+  <button class="tab" onclick="showTab('fixture',this)">Fixture</button>
   <button class="tab" onclick="showTab('p1',this)">Partido 1 · vs Bahiense</button>
   <button class="tab" onclick="showTab('p2',this)">Partido 2 · vs Pueyrredón</button>
   <button class="tab" onclick="showTab('p3',this)">Partido 3 · vs Estrella</button>
@@ -932,6 +947,149 @@ footer{text-align:center;color:#94a3b8;font-size:.72rem;padding:20px;border-top:
   <p style="color:#94a3b8;font-size:.72rem;margin-top:8px;padding-left:4px">● Titular &nbsp;|&nbsp; <span style="background:#fbbf24;color:#713f12;padding:1px 4px;border-radius:3px;font-size:.65rem;font-weight:800">CAP</span> Capitán</p>
 </div><!-- /tab-p4 -->
 
+<!-- ═══════════════════════════════════════
+     FIXTURE
+═══════════════════════════════════════ -->
+<div id="tab-fixture" class="panel">
+
+  <div class="section-title">Ronda 1 — Ida</div>
+  <div class="fixture-list">
+    <div class="fixture-row">
+      <div class="fixture-num">1</div>
+      <div class="fixture-rival">Bahiense del Norte</div>
+      <span class="badge badge-visit">Visita</span>
+      <span class="badge badge-loss">Derrota</span>
+      <div class="fixture-score"><span class="s-riv">90</span><span class="s-sep">–</span><span class="s-nap">78</span></div>
+    </div>
+    <div class="fixture-row">
+      <div class="fixture-num">2</div>
+      <div class="fixture-rival">Pueyrredón</div>
+      <span class="badge badge-local">Local</span>
+      <span class="badge badge-win">Victoria</span>
+      <div class="fixture-score"><span class="s-nap">78</span><span class="s-sep">–</span><span class="s-riv">76</span></div>
+    </div>
+    <div class="fixture-row">
+      <div class="fixture-num">3</div>
+      <div class="fixture-rival">Estrella</div>
+      <span class="badge badge-visit">Visita</span>
+      <span class="badge badge-win">Victoria</span>
+      <div class="fixture-score"><span class="s-riv">64</span><span class="s-sep">–</span><span class="s-nap">79</span></div>
+    </div>
+    <div class="fixture-row">
+      <div class="fixture-num">4</div>
+      <div class="fixture-rival">Leandro N. Alem</div>
+      <span class="badge badge-visit">Visita</span>
+      <span class="badge badge-win">Victoria</span>
+      <div class="fixture-score"><span class="s-riv">64</span><span class="s-sep">–</span><span class="s-nap">86</span></div>
+    </div>
+    <div class="fixture-row">
+      <div class="fixture-num">5</div>
+      <div class="fixture-rival">Liniers</div>
+      <span class="badge badge-local">Local</span>
+      <span class="badge badge-pending">Pendiente</span>
+      <div class="fixture-pending">—</div>
+    </div>
+    <div class="fixture-row">
+      <div class="fixture-num">6</div>
+      <div class="fixture-rival">Olimpo</div>
+      <span class="badge badge-visit">Visita</span>
+      <span class="badge badge-pending">Pendiente</span>
+      <div class="fixture-pending">—</div>
+    </div>
+    <div class="fixture-row">
+      <div class="fixture-num">7</div>
+      <div class="fixture-rival">Villa Mitre</div>
+      <span class="badge badge-local">Local</span>
+      <span class="badge badge-pending">Pendiente</span>
+      <div class="fixture-pending">—</div>
+    </div>
+    <div class="fixture-row">
+      <div class="fixture-num">8</div>
+      <div class="fixture-rival">9 de Julio</div>
+      <span class="badge badge-visit">Visita</span>
+      <span class="badge badge-pending">Pendiente</span>
+      <div class="fixture-pending">—</div>
+    </div>
+    <div class="fixture-row">
+      <div class="fixture-num">9</div>
+      <div class="fixture-rival">Pacífico</div>
+      <span class="badge badge-local">Local</span>
+      <span class="badge badge-pending">Pendiente</span>
+      <div class="fixture-pending">—</div>
+    </div>
+  </div>
+
+  <div class="section-title">Ronda 2 — Vuelta</div>
+  <div class="fixture-list">
+    <div class="fixture-row">
+      <div class="fixture-num">10</div>
+      <div class="fixture-rival">Bahiense del Norte</div>
+      <span class="badge badge-local">Local</span>
+      <span class="badge badge-pending">Pendiente</span>
+      <div class="fixture-pending">—</div>
+    </div>
+    <div class="fixture-row">
+      <div class="fixture-num">11</div>
+      <div class="fixture-rival">Pueyrredón</div>
+      <span class="badge badge-visit">Visita</span>
+      <span class="badge badge-pending">Pendiente</span>
+      <div class="fixture-pending">—</div>
+    </div>
+    <div class="fixture-row">
+      <div class="fixture-num">12</div>
+      <div class="fixture-rival">Estrella</div>
+      <span class="badge badge-local">Local</span>
+      <span class="badge badge-pending">Pendiente</span>
+      <div class="fixture-pending">—</div>
+    </div>
+    <div class="fixture-row">
+      <div class="fixture-num">13</div>
+      <div class="fixture-rival">Leandro N. Alem</div>
+      <span class="badge badge-local">Local</span>
+      <span class="badge badge-pending">Pendiente</span>
+      <div class="fixture-pending">—</div>
+    </div>
+    <div class="fixture-row">
+      <div class="fixture-num">14</div>
+      <div class="fixture-rival">Liniers</div>
+      <span class="badge badge-visit">Visita</span>
+      <span class="badge badge-pending">Pendiente</span>
+      <div class="fixture-pending">—</div>
+    </div>
+    <div class="fixture-row">
+      <div class="fixture-num">15</div>
+      <div class="fixture-rival">Olimpo</div>
+      <span class="badge badge-local">Local</span>
+      <span class="badge badge-pending">Pendiente</span>
+      <div class="fixture-pending">—</div>
+    </div>
+    <div class="fixture-row">
+      <div class="fixture-num">16</div>
+      <div class="fixture-rival">Villa Mitre</div>
+      <span class="badge badge-visit">Visita</span>
+      <span class="badge badge-pending">Pendiente</span>
+      <div class="fixture-pending">—</div>
+    </div>
+    <div class="fixture-row">
+      <div class="fixture-num">17</div>
+      <div class="fixture-rival">9 de Julio</div>
+      <span class="badge badge-local">Local</span>
+      <span class="badge badge-pending">Pendiente</span>
+      <div class="fixture-pending">—</div>
+    </div>
+    <div class="fixture-row">
+      <div class="fixture-num">18</div>
+      <div class="fixture-rival">Pacífico</div>
+      <span class="badge badge-visit">Visita</span>
+      <span class="badge badge-pending">Pendiente</span>
+      <div class="fixture-pending">—</div>
+    </div>
+  </div>
+
+  <p style="color:#94a3b8;font-size:.72rem;padding-left:4px">Marcador: Local – Visitante &nbsp;|&nbsp; <span style="color:#f97316;font-weight:700">Naranja</span> = Naposta</p>
+
+</div><!-- /tab-fixture -->
+
 </div><!-- /content -->
 
 <footer>Naposta U21 · Básquetbol · DT: D'Annunzio, Gustavo Adrián &nbsp;·&nbsp; Datos tomados de planillas oficiales</footer>
@@ -1058,6 +1216,79 @@ function buildStats(){
   grid.innerHTML=lhtml;
 }
 buildStats();
+
+function buildGameLeaders(){
+  function parseMin(s){var m=String(s).match(/(\d+):(\d+)/);return m?+m[1]*60+ +m[2]:0;}
+  function shortN(k){var p=k.split(',');return p.length<2?k:p[0].trim()+', '+p[1].trim().charAt(0)+'.';}
+  function getKey(tdEl){
+    var c=tdEl.cloneNode(true);
+    var nodes=c.querySelectorAll('span,small');
+    for(var i=nodes.length-1;i>=0;i--) nodes[i].parentNode.removeChild(nodes[i]);
+    return c.textContent.replace(/\s+/g,' ').trim();
+  }
+  function card(cat,name,num,det){
+    return '<div class="leader"><div class="leader-cat">'+cat+'</div><div class="leader-name">'+name+'</div><div class="leader-num">'+num+'</div><div class="leader-detail">'+det+'</div></div>';
+  }
+  function bestOf(arr,fn){
+    var b=null,bv=-Infinity;
+    for(var i=0;i<arr.length;i++){var v=fn(arr[i]);if(v>bv){bv=v;b=arr[i];}}
+    return b;
+  }
+
+  var gameIds=['tab-p1','tab-p2','tab-p3','tab-p4'];
+  for(var gi=0;gi<gameIds.length;gi++){
+    var panel=document.getElementById(gameIds[gi]);
+    if(!panel) continue;
+
+    var rows=panel.querySelectorAll('tbody tr');
+    var players=[];
+    for(var ri=0;ri<rows.length;ri++){
+      var tr=rows[ri];
+      if(tr.className.indexOf('row-total')>=0) continue;
+      var tds=tr.querySelectorAll('td');
+      if(tds.length<20) continue;
+      if(parseMin(tds[1].textContent.trim())===0) continue;
+      players.push({
+        key:getKey(tds[0]),
+        pts:parseInt(tds[2].textContent)||0,
+        tot:parseInt(tds[11].textContent)||0,
+        ast:parseInt(tds[12].textContent)||0,
+        rec:parseInt(tds[13].textContent)||0,
+        val:parseInt(tds[19].textContent)||0
+      });
+    }
+    if(!players.length) continue;
+
+    var lPts=bestOf(players,function(p){return p.pts;});
+    var lReb=bestOf(players,function(p){return p.tot;});
+    var lAst=bestOf(players,function(p){return p.ast;});
+    var lRec=bestOf(players,function(p){return p.rec;});
+    var lVal=bestOf(players,function(p){return p.val;});
+
+    var lhtml='';
+    if(lPts) lhtml+=card('Puntos',      shortN(lPts.key),lPts.pts,lPts.pts+' pts en el partido');
+    if(lReb) lhtml+=card('Rebotes',     shortN(lReb.key),lReb.tot,lReb.tot+' rebotes totales');
+    if(lAst&&lAst.ast>0) lhtml+=card('Asistencias',shortN(lAst.key),lAst.ast,lAst.ast+' asistencias');
+    if(lRec&&lRec.rec>0) lhtml+=card('Robos',      shortN(lRec.key),lRec.rec,lRec.rec+' robos');
+    if(lVal) lhtml+=card('Valoración',  shortN(lVal.key),lVal.val,'val. en el partido');
+
+    var titleEl=document.createElement('div');
+    titleEl.className='section-title';
+    titleEl.textContent='Jugadores destacados';
+    titleEl.style.marginTop='16px';
+
+    var gridEl=document.createElement('div');
+    gridEl.className='leaders';
+    gridEl.innerHTML=lhtml;
+
+    var tblWrap=panel.querySelector('.tbl-wrap');
+    if(tblWrap){
+      panel.insertBefore(gridEl,tblWrap);
+      panel.insertBefore(titleEl,gridEl);
+    }
+  }
+}
+buildGameLeaders();
 </script>
 </body>
 </html>
